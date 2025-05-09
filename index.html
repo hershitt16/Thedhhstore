@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>THE DHH STORE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+    .popup-box {
+      position: fixed;
+      bottom: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+      height: 40vh;
+      background: white;
+      color: black;
+      border-radius: 12px 12px 0 0;
+      padding: 2rem;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+      transition: bottom 1s ease;
+      z-index: 50;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .popup-box.show {
+      bottom: 50vh;
+    }
+    .typing {
+      border-right: 3px solid black;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      animation: blink-caret 0.75s step-end infinite;
+      font-weight: 700;
+      font-size: 2rem;
+    }
+    @keyframes blink-caret {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: black; }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen px-4 relative">
+
+  <div id="content" class="space-y-6 text-center">
+    <div id="counter" class="text-5xl sm:text-6xl font-bold"></div>
+    <div id="spotify91" class="text-3xl sm:text-4xl font-semibold opacity-0 transition-opacity duration-1000">spotify 91</div>
+    <div id="dhhstore" class="text-5xl sm:text-7xl font-extrabold opacity-0 transition-opacity duration-1000">THE DHH STORE</div>
+  </div>
+
+  <div id="popup" class="popup-box">
+    <div id="pen-icon" class="text-4xl mb-4 opacity-0 transition-opacity duration-500"><i class="fas fa-pen"></i></div>
+    <div id="typing-text" class="typing"></div>
+    <div id="coming-soon" class="mt-4 text-xl font-semibold opacity-0 transition-opacity duration-1000">Coming soon</div>
+    <div id="follow-text" class="mt-6 text-lg opacity-0 transition-opacity duration-1000">
+      Follow us on Instagram For Free 91 Tickets
+    </div>
+    <div id="small-text" class="mt-2 text-sm opacity-0 transition-opacity duration-1000">
+      (can be used to purchase product)
+    </div>
+  </div>
+
+  <script>
+    const counterEl = document.getElementById('counter');
+    const spotifyEl = document.getElementById('spotify91');
+    const dhhstoreEl = document.getElementById('dhhstore');
+    const contentEl = document.getElementById('content');
+    const popup = document.getElementById('popup');
+    const penIcon = document.getElementById('pen-icon');
+    const typingText = document.getElementById('typing-text');
+    const comingSoon = document.getElementById('coming-soon');
+    const followText = document.getElementById('follow-text');
+    const smallText = document.getElementById('small-text');
+
+    let count = 0;
+    const target = 91;
+    const interval = 32; // ms
+
+    function updateCounter() {
+      if (count <= target) {
+        counterEl.textContent = count;
+        count++;
+        setTimeout(updateCounter, interval);
+      } else {
+        spotifyEl.style.opacity = 1;
+        dhhstoreEl.style.opacity = 1;
+        setTimeout(() => {
+          contentEl.style.display = 'none';
+          popup.classList.add('show');
+          setTimeout(showPenAndType, 1000);
+        }, 5000);
+      }
+    }
+
+    function showPenAndType() {
+      penIcon.style.opacity = 1;
+      typeText("Shop now", 0, () => {
+        comingSoon.style.opacity = 1;
+        setTimeout(() => {
+          followText.style.opacity = 1;
+          smallText.style.opacity = 1;
+        }, 2000);
+      });
+    }
+
+    function typeText(text, index, callback) {
+      if (index < text.length) {
+        typingText.textContent += text.charAt(index);
+        setTimeout(() => typeText(text, index + 1, callback), 150);
+      } else {
+        typingText.classList.remove('typing');
+        if (callback) callback();
+      }
+    }
+
+    updateCounter();
+  </script>
+</body>
+</html>
