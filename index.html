@@ -1,620 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THE DHH STORE</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <title>RAP 91 - THE DHH STORE</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
-    })();
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #000;
       color: #fff;
-      overflow-x: hidden;
-    }
-    .glitch-button {
-      position: relative;
-      color: white;
-      font-weight: 700;
-      font-size: 2rem;
-      padding: 1rem 3rem;
-      border: 2px solid white;
-      background: transparent;
-      cursor: pointer;
-      overflow: hidden;
-      user-select: none;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    .glitch-button::before,
-    .glitch-button::after {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      opacity: 0.8;
-      clip: rect(0, 0, 0, 0);
-    }
-    .glitch-button::before {
-      left: 2px;
-      text-shadow: -2px 0 red;
-      animation: glitch-anim-2 2s infinite linear alternate-reverse;
-    }
-    .glitch-button::after {
-      left: -2px;
-      text-shadow: -2px 0 blue;
-      animation: glitch-anim 2s infinite linear alternate-reverse;
-    }
-    @keyframes glitch-anim {
-      0% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      5% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      10% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      15% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      20% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      25% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      30% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      35% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      40% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      100% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-    }
-    @keyframes glitch-anim-2 {
-      0% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      5% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      10% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      15% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      20% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      25% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      30% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      35% {
-        clip: rect(0, 9999px, 100%, 0);
-      }
-      40% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-      100% {
-        clip: rect(0, 9999px, 0, 0);
-      }
-    }
-    .typing {
-      border-right: 2px solid white;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: typing 2s steps(12) forwards, blink 0.75s step-end infinite;
-      font-weight: 700;
-      font-size: 2rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    @keyframes typing {
-      from {
-        width: 0;
-      }
-      to {
-        width: 12ch;
-      }
-    }
-    @keyframes blink {
-      50% {
-        border-color: transparent;
-      }
-    }
-    .profile-circle {
-      width: 40px;
-      height: 40px;
-      background-color: white;
-      color: black;
-      font-weight: 700;
-      font-size: 1.25rem;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4 relative">
-
-  <!-- Initial Counter and Text Container -->
-  <div id="initial-container" class="flex flex-col items-center justify-center space-y-4">
-    <div id="counter" class="text-6xl font-semibold select-none">0</div>
-    <div id="rap91" class="text-2xl font-semibold opacity-0 select-none">RAP 91</div>
-    <div id="store-name" class="text-6xl font-bold opacity-0 select-none">THE DHH STORE</div>
-  </div>
-
-  <!-- Brand Logo (hidden on counter page) -->
-  <img id="brand-logo" src="
-  <!-- Glitch Button Container -->
-  <div id="glitch-container" class="hidden flex flex-col items-center justify-center space-y-4">
-    <button id="glitch-button" class="glitch-button" data-text="WHITELIST ME"></button>
-  </div>
-
-  <!-- Whitelist Form Container -->
-  <div id="whitelist-form-container" class="hidden max-w-md w-full p-6 bg-black bg-opacity-80 rounded-md shadow-lg">
-    <h2 class="text-3xl font-bold mb-6 text-center">Whitelist Me</h2>
-    <form id="whitelist-form" class="flex flex-col space-y-4">
-      <input type="text" id="name" name="name" placeholder="Name" required class="p-3 rounded bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-white" />
-      <input type="email" id="email" name="email" placeholder="Email" required class="p-3 rounded bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-white" />
-      <input type="tel" id="phone" name="phone" placeholder="Phone Number" required class="p-3 rounded bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-white" />
-      <button type="submit" class="bg-white text-black font-bold py-3 rounded hover:bg-gray-300 transition">Submit</button>
-    </form>
-  </div>
-
-  <!-- Product Options Container -->
-  <div id="product-options-container" class="hidden flex flex-col items-center space-y-8 max-w-4xl w-full">
-    <h2 class="text-4xl font-bold mb-4">THE DHH STORE</h2>
-    <div id="banner" class="w-full h-48 bg-gray-900 rounded-md flex items-center justify-around text-white text-3xl font-bold uppercase select-none cursor-pointer">
-      <!-- Editable banner options -->
-      <div data-product="tees" class="banner-option px-6 py-4 hover:bg-gray-700 rounded transition">Tees</div>
-      <div data-product="pants" class="banner-option px-6 py-4 hover:bg-gray-700 rounded transition">Pants</div>
-      <div data-product="shoes" class="banner-option px-6 py-4 hover:bg-gray-700 rounded transition">Shoes</div>
-      <div data-product="jewellery" class="banner-option px-6 py-4 hover:bg-gray-700 rounded transition">Jewellery</div>
-    </div>
-  </div>
-
-  <!-- Catalogue Container -->
-  <div id="catalogue-container" class="hidden max-w-4xl w-full">
-    <h2 class="text-4xl font-bold mb-4 text-center">THE DHH STORE</h2>
-    <button id="back-button" class="mb-4 text-white font-bold text-lg hover:underline">&larr; Back</button>
-    <div id="catalogue-items" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
-  </div>
-
-  <!-- Profile Container -->
-  <div id="profile-container" class="fixed top-4 right-4 flex items-center space-x-4 z-50">
-    <div id="profile-circle" class="profile-circle hidden"></div>
-    <div id="profile-info" class="hidden flex flex-col bg-gray-900 bg-opacity-90 p-4 rounded-md text-white text-sm space-y-2">
-      <div id="profile-name" class="font-bold"></div>
-      <div id="profile-email" class="truncate max-w-xs"></div>
-      <div id="order-history" class="mt-4">
-        <h3 class="font-semibold mb-2">Order History</h3>
-        <ul id="order-list" class="text-sm max-h-32 overflow-y-auto">
-          <!-- Orders will be listed here -->
-        </ul>
-      </div>
-      <div id="order-tracking" class="mt-4">
-        <h3 class="font-semibold mb-2">Order Tracking</h3>
-        <input type="text" id="tracking-number" placeholder="Enter tracking number" class="p-2 rounded bg-gray-800 text-white w-full mb-2" />
-        <button id="track-order-button" class="bg-white text-black font-bold py-1 rounded hover:bg-gray-300 transition w-full">Track Order</button>
-        <div id="tracking-result" class="mt-2 text-sm"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cart Button -->
-  <button id="view-cart-button" class="fixed top-4 left-4 bg-white text-black font-bold py-1 px-3 rounded hover:bg-gray-300 transition hidden z-50">View Cart</button>
-
-  <!-- Cart Modal -->
-  <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center p-6 hidden z-50">
-    <div class="bg-gray-900 rounded-md max-w-md w-full p-6 relative">
-      <button id="close-cart-button" class="absolute top-2 right-2 text-white text-xl font-bold">&times;</button>
-      <h2 class="text-2xl font-bold mb-4 text-white">Your Cart</h2>
-      <div id="cart-items" class="mb-4 max-h-64 overflow-y-auto"></div>
-      <button id="checkout-button" class="bg-white text-black font-bold py-3 rounded w-full hover:bg-gray-300 transition">Checkout</button>
-    </div>
-  </div>
+<body class="flex flex-col justify-center items-center min-h-screen px-4">
+  <div id="counter" class="text-6xl sm:text-8xl font-extrabold">0</div>
+  <div id="rap91" class="mt-4 text-3xl sm:text-4xl font-semibold opacity-0 transition-opacity duration-700">RAP 91</div>
+  <div id="store" class="mt-2 text-5xl sm:text-7xl font-black opacity-0 transition-opacity duration-700">THE DHH STORE</div>
 
   <script>
-    // Editable banner data (can be edited by developer)
-    const bannerOptions = [
-      { id: 'tees', label: 'Tees' },
-      { id: 'pants', label: 'Pants' },
-      { id: 'shoes', label: 'Shoes' },
-      { id: 'jewellery', label: 'Jewellery' }
-    ];
-
-    // Editable catalogue data (can be edited by developer)
-      const catalogueData = {
-      tees: [
-        { id: 't1', name: 'Classic Tee', price: '$20', image: 'https://via.placeholder.com/150?text=Classic+Tee' },
-        { id: 't2', name: 'Graphic Tee', price: '$25', image: 'https://via.placeholder.com/150?text=Graphic+Tee' },
-        { id: 't3', name: 'V-Neck Tee', price: '$22', image: 'https://via.placeholder.com/150?text=V-Neck+Tee' }
-      ],
-      pants: [
-        { id: 'p1', name: 'Jeans', price: '$40', image: 'https://via.placeholder.com/150?text=Jeans' },
-        { id: 'p2', name: 'Chinos', price: '$35', image: 'https://via.placeholder.com/150?text=Chinos' },
-        { id: 'p3', name: 'Shorts', price: '$30', image: 'https://via.placeholder.com/150?text=Shorts' }
-      ],
-      shoes: [
-        { id: 's1', name: 'Sneakers', price: '$60', image: 'https://via.placeholder.com/150?text=Sneakers' },
-        { id: 's2', name: 'Boots', price: '$80', image: 'https://via.placeholder.com/150?text=Boots' },
-        { id: 's3', name: 'Sandals', price: '$25', image: 'https://via.placeholder.com/150?text=Sandals' }
-      ],
-      jewellery: [
-        { id: 'j1', name: 'Necklace', price: '$100', image: 'https://via.placeholder.com/150?text=Necklace' },
-        { id: 'j2', name: 'Bracelet', price: '$70', image: 'https://via.placeholder.com/150?text=Bracelet' },
-        { id: 'j3', name: 'Ring', price: '$50', image: 'https://via.placeholder.com/150?text=Ring' }
-      ]
-    };
-
-    // State variables
-    let userData = null;
-    let cart = [];
-
-    // Elements
-    const initialContainer = document.getElementById('initial-container');
     const counterEl = document.getElementById('counter');
     const rap91El = document.getElementById('rap91');
-    const storeNameEl = document.getElementById('store-name');
-    const glitchContainer = document.getElementById('glitch-container');
-    const glitchButton = document.getElementById('glitch-button');
-    const whitelistFormContainer = document.getElementById('whitelist-form-container');
-    const whitelistForm = document.getElementById('whitelist-form');
-    const productOptionsContainer = document.getElementById('product-options-container');
-    const bannerEl = document.getElementById('banner');
-    const catalogueContainer = document.getElementById('catalogue-container');
-    const catalogueItems = document.getElementById('catalogue-items');
-    const backButton = document.getElementById('back-button');
-    const profileCircle = document.getElementById('profile-circle');
-    const profileInfo = document.getElementById('profile-info');
-    const profileName = document.getElementById('profile-name');
-    const profileEmail = document.getElementById('profile-email');
+    const storeEl = document.getElementById('store');
 
-    // Initialize
-    function init() {
-      loadUserData();
-      // Always show initial counter page to all users
-      showInitialCounter();
-      setupEventListeners();
+    let count = 0;
+    const maxCount = 91;
 
-      // Show or hide brand logo based on page
-      // Removed brand logo related code as per user request
-    }
+    function updateCounter() {
+      if (count < maxCount) {
+        count++;
+        counterEl.textContent = count;
+        requestAnimationFrame(updateCounter);
+      } else {
+        // Show RAP 91 and THE DHH STORE with fade-in
+        rap91El.style.opacity = '1';
+        storeEl.style.opacity = '1';
 
-    // Show initial counter from 0 to 91 with animation
-    function showInitialCounter() {
-      let count = 0;
-      counterEl.textContent = count;
-      rap91El.style.opacity = 0;
-      storeNameEl.style.opacity = 0;
-      initialContainer.classList.remove('hidden');
-      glitchContainer.classList.add('hidden');
-      whitelistFormContainer.classList.add('hidden');
-      productOptionsContainer.classList.add('hidden');
-      catalogueContainer.classList.add('hidden');
-      profileCircle.classList.add('hidden');
-      profileInfo.classList.add('hidden');
-
-      setTimeout(() => {
-        let count = 0;
-        const fastInterval = setInterval(() => {
-          count++;
-          if (count <= 91) {
-            counterEl.textContent = count;
-          }
-          if (count === 91) {
-            clearInterval(fastInterval);
-            // Replace counter with RAP 91
-            counterEl.textContent = 'RAP 91';
-            counterEl.style.fontSize = '6rem';
-            counterEl.style.transition = 'opacity 0.5s ease';
-            counterEl.style.opacity = 1;
-            storeNameEl.style.transition = 'opacity 0.5s ease';
-            storeNameEl.style.opacity = 1;
-
-            // After 5 seconds, erase all text and show glitch button
-            setTimeout(() => {
-              initialContainer.classList.add('hidden');
-              showGlitchButton();
-            }, 3000);
-          }
-        }, 50);
-      }, 500);
-    }
-
-    // Show glitch button with glitch effect for 2 seconds then typing effect "whitelist me"
-    function showGlitchButton() {
-      glitchContainer.classList.remove('hidden');
-      glitchButton.textContent = '';
-      glitchButton.setAttribute('data-text', 'WHITELIST ME');
-      glitchButton.style.opacity = '1';
-      glitchButton.style.pointerEvents = 'none';
-
-      // Show glitch effect for 2 seconds
-      setTimeout(() => {
-        glitchButton.style.pointerEvents = 'auto';
-        glitchButton.textContent = '';
-        glitchButton.classList.remove('glitch-button');
-        glitchButton.classList.add('typing');
-        let text = 'whitelist me';
-        let index = 0;
-        const typingInterval = setInterval(() => {
-          glitchButton.textContent += text[index];
-          index++;
-          if (index >= text.length) {
-            clearInterval(typingInterval);
-            glitchButton.classList.remove('typing');
-          }
-        }, 150);
-      }, 2000);
-    }
-
-    // Setup event listeners
-    function setupEventListeners() {
-      glitchButton.addEventListener('click', () => {
-        glitchContainer.classList.add('hidden');
-        showWhitelistForm();
-      });
-
-      whitelistForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = whitelistForm.name.value.trim();
-        const email = whitelistForm.email.value.trim();
-        const phone = whitelistForm.phone.value.trim();
-        if (name && email && phone) {
-          userData = { name, email, phone };
-          saveUserData();
-          showProductOptions();
-          updateProfileUI();
-        }
-      });
-
-      bannerEl.addEventListener('click', (e) => {
-        const target = e.target.closest('.banner-option');
-        if (target) {
-          const product = target.getAttribute('data-product');
-          showCatalogue(product);
-        }
-      });
-
-      backButton.addEventListener('click', () => {
-        catalogueContainer.classList.add('hidden');
-        productOptionsContainer.classList.remove('hidden');
-      });
-
-      profileCircle.addEventListener('click', () => {
-        if (profileInfo.classList.contains('hidden')) {
-          profileInfo.classList.remove('hidden');
-        } else {
-          profileInfo.classList.add('hidden');
-        }
-      });
-
-      // Show cart button if user logged in
-      const viewCartButton = document.getElementById('view-cart-button');
-      viewCartButton.addEventListener('click', () => {
-        showCartModal();
-      });
-
-      // Close cart modal
-      const closeCartButton = document.getElementById('close-cart-button');
-      closeCartButton.addEventListener('click', () => {
-        hideCartModal();
-      });
-
-      // Checkout button
-      const checkoutButton = document.getElementById('checkout-button');
-      checkoutButton.addEventListener('click', () => {
-        if (cart.length === 0) {
-          alert('Your cart is empty. Please add items before checkout.');
-          return;
-        }
-        // Simulate opening a payment gateway
-        window.open('https://example-payment-gateway.com/checkout', '_blank');
-      });
-
-      // Track order button
-      const trackOrderButton = document.getElementById('track-order-button');
-      const trackingResult = document.getElementById('tracking-result');
-      trackOrderButton.addEventListener('click', () => {
-        const trackingNumber = document.getElementById('tracking-number').value.trim();
-        if (!trackingNumber) {
-          trackingResult.textContent = 'Please enter a tracking number.';
-          return;
-        }
-        // Simulate tracking result
-        trackingResult.textContent = `Tracking info for ${trackingNumber}: In transit. Estimated delivery in 3 days.`;
-      });
-
-      // Load order history from localStorage
-      function loadOrderHistory() {
-        const orders = JSON.parse(localStorage.getItem('dhhOrderHistory') || '[]');
-        const orderList = document.getElementById('order-list');
-        orderList.innerHTML = '';
-        if (orders.length === 0) {
-          orderList.innerHTML = '<li>No orders found.</li>';
-        } else {
-          orders.forEach(order => {
-            const li = document.createElement('li');
-            li.textContent = `Order #${order.id} - ${order.status}`;
-            orderList.appendChild(li);
-          });
-        }
+        // After 2 seconds, show the new message and button
+        setTimeout(() => {
+          showJoinMessage();
+        }, 2000);
       }
+    }
 
-      // Save order to order history
-      function saveOrder(order) {
-        const orders = JSON.parse(localStorage.getItem('dhhOrderHistory') || '[]');
-        orders.push(order);
-        localStorage.setItem('dhhOrderHistory', JSON.stringify(orders));
-      }
+    function showJoinMessage() {
+      // Clear previous content
+      counterEl.style.display = 'none';
+      rap91El.style.display = 'none';
+      storeEl.style.display = 'none';
 
-      // Modify addToCart to save order on checkout simulation
-      const originalAddToCart = addToCart;
-      addToCart = function(item) {
-        originalAddToCart(item);
-        // Simulate saving an order with a random id and status
-        const order = { id: Math.floor(Math.random() * 100000), status: 'Processing' };
-        saveOrder(order);
+      // Create new container for join message and button
+      const joinContainer = document.createElement('div');
+      joinContainer.className = 'flex flex-col items-center text-center';
+
+      const joinMessage = document.createElement('div');
+      joinMessage.textContent = 'WHATSUP MOSHPITS WANNA JOIN US';
+      joinMessage.className = 'text-4xl sm:text-7xl font-extrabold mb-6 px-2 text-center break-words max-w-full';
+
+      const joinButton = document.createElement('button');
+      joinButton.textContent = 'I WANT TO';
+      joinButton.className = 'bg-white text-black font-bold py-3 px-8 rounded hover:bg-gray-200 transition';
+      joinButton.onclick = () => {
+        window.location.href = 'join.html';
       };
 
-      // Load order history on profile update
-      const originalUpdateProfileUI = updateProfileUI;
-      updateProfileUI = function() {
-        originalUpdateProfileUI();
-        loadOrderHistory();
-      };
+      joinContainer.appendChild(joinMessage);
+      joinContainer.appendChild(joinButton);
+
+      document.body.appendChild(joinContainer);
     }
 
-    // Show whitelist form
-    function showWhitelistForm() {
-      whitelistFormContainer.classList.remove('hidden');
-      productOptionsContainer.classList.add('hidden');
-      catalogueContainer.classList.add('hidden');
-      initialContainer.classList.add('hidden');
-      glitchContainer.classList.add('hidden');
-    }
-
-    // Show product options page
-    function showProductOptions() {
-      productOptionsContainer.classList.remove('hidden');
-      whitelistFormContainer.classList.add('hidden');
-      catalogueContainer.classList.add('hidden');
-      initialContainer.classList.add('hidden');
-      glitchContainer.classList.add('hidden');
-    }
-
-    // Show catalogue for selected product
-    function showCatalogue(product) {
-      catalogueItems.innerHTML = '';
-      const items = catalogueData[product] || [];
-      items.forEach(item => {
-        const itemEl = document.createElement('div');
-        itemEl.className = 'bg-gray-800 p-4 rounded cursor-pointer hover:bg-gray-700 flex flex-col justify-between';
-        itemEl.innerHTML = `
-          <img src="${item.image}" alt="${item.name}" class="mb-2 rounded" />
-          <div class="font-bold text-lg mb-2">${item.name}</div>
-          <div class="text-white mb-4">${item.price}</div>
-          <button class="bg-white text-black font-bold py-1 rounded hover:bg-gray-300 transition add-to-cart-btn" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}">Add to Cart</button>
-        `;
-        catalogueItems.appendChild(itemEl);
-      });
-      catalogueContainer.classList.remove('hidden');
-      productOptionsContainer.classList.add('hidden');
-      whitelistFormContainer.classList.add('hidden');
-      initialContainer.classList.add('hidden');
-      glitchContainer.classList.add('hidden');
-
-      // Add event listeners for add to cart buttons
-      const addToCartButtons = catalogueContainer.querySelectorAll('.add-to-cart-btn');
-      addToCartButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const name = btn.getAttribute('data-name');
-          const price = btn.getAttribute('data-price');
-          addToCart({ id, name, price });
-        });
-      });
-    }
-
-    // Add item to cart
-    function addToCart(item) {
-      cart.push(item);
-      saveCart();
-      alert(`Added ${item.name} to cart.`);
-    }
-
-    // Save user data to localStorage
-    function saveUserData() {
-      localStorage.setItem('dhhUserData', JSON.stringify(userData));
-    }
-
-    // Load user data from localStorage
-    function loadUserData() {
-      const data = localStorage.getItem('dhhUserData');
-      if (data) {
-        userData = JSON.parse(data);
-      }
-    }
-
-    // Save cart to localStorage
-    function saveCart() {
-      localStorage.setItem('dhhCart', JSON.stringify(cart));
-    }
-
-    // Load cart from localStorage
-    function loadCart() {
-      const data = localStorage.getItem('dhhCart');
-      if (data) {
-        cart = JSON.parse(data);
-      }
-    }
-
-    // Update profile UI
-    function updateProfileUI() {
-      if (userData) {
-        profileCircle.textContent = userData.name.charAt(0).toUpperCase();
-        profileCircle.classList.remove('hidden');
-        profileName.textContent = userData.name;
-        profileEmail.textContent = userData.email;
-        document.getElementById('view-cart-button').classList.remove('hidden');
-      } else {
-        profileCircle.classList.add('hidden');
-        profileInfo.classList.add('hidden');
-        document.getElementById('view-cart-button').classList.add('hidden');
-      }
-    }
-
-    // Initialize app
-    init();
-
-    // Show cart modal
-    function showCartModal() {
-      const cartModal = document.getElementById('cart-modal');
-      const cartItemsContainer = document.getElementById('cart-items');
-      cartItemsContainer.innerHTML = '';
-      if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="text-white">Your cart is empty.</p>';
-      } else {
-        cart.forEach(item => {
-          const itemEl = document.createElement('div');
-          itemEl.className = 'flex justify-between items-center mb-2 text-white';
-          itemEl.textContent = `${item.name} - ${item.price}`;
-          cartItemsContainer.appendChild(itemEl);
-        });
-      }
-      cartModal.classList.remove('hidden');
-    }
-
-    // Hide cart modal
-    function hideCartModal() {
-      const cartModal = document.getElementById('cart-modal');
-      cartModal.classList.add('hidden');
-    }
+    // Start counting on page load
+    window.onload = () => {
+      counterEl.textContent = '0';
+      requestAnimationFrame(updateCounter);
+    };
   </script>
 </body>
 </html>

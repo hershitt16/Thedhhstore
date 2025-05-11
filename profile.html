@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile - THE DHH STORE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-black text-white relative">
+  <header class="flex justify-end p-4">
+    <button id="profileBtn" aria-label="User Profile" class="relative w-10 h-10 rounded-full bg-white text-black font-bold flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white">
+      <span id="profileInitial" class="text-lg select-none"></span>
+    </button>
+  </header>
+
+    <main class="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-4">
+      <h1 class="text-5xl sm:text-7xl font-extrabold mb-2 text-center">Welcome to THE DHH STORE</h1>
+      <p class="text-xl sm:text-2xl font-semibold text-gray-300 px-2 text-center break-words max-w-full">Coming Soon</p>
+    </main>
+
+  <!-- Modal -->
+  <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white text-black rounded-lg p-6 max-w-sm w-full relative">
+      <button id="closeModal" aria-label="Close" class="absolute top-2 right-2 text-black font-bold text-xl">&times;</button>
+      <h2 class="text-2xl font-semibold mb-4">User Information</h2>
+      <p><strong>Name:</strong> <span id="userName"></span></p>
+      <p><strong>Email:</strong> <span id="userEmail"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const profileBtn = document.getElementById('profileBtn');
+    const profileModal = document.getElementById('profileModal');
+    const closeModal = document.getElementById('closeModal');
+    const userNameSpan = document.getElementById('userName');
+    const userEmailSpan = document.getElementById('userEmail');
+
+    profileBtn.addEventListener('click', () => {
+      // Load user info from localStorage
+      const name = localStorage.getItem('dhhUserName') || 'Unknown';
+      const email = localStorage.getItem('dhhUserEmail') || 'Unknown';
+
+      userNameSpan.textContent = name;
+      userEmailSpan.textContent = email;
+
+      // Set profile initial
+      const profileInitial = document.getElementById('profileInitial');
+      profileInitial.textContent = name.charAt(0).toUpperCase();
+
+      profileModal.classList.remove('opacity-0', 'pointer-events-none');
+    });
+
+    closeModal.addEventListener('click', () => {
+      profileModal.classList.add('opacity-0', 'pointer-events-none');
+    });
+
+    // Close modal on outside click
+    profileModal.addEventListener('click', (e) => {
+      if (e.target === profileModal) {
+        profileModal.classList.add('opacity-0', 'pointer-events-none');
+      }
+    });
+  </script>
+</body>
+</html>
