@@ -1,73 +1,777 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Profile - THE DHH STORE</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #000;
-      color: #fff;
-    }
-  </style>
-</head>
-<body class="min-h-screen bg-black text-white relative">
-  <header class="flex justify-end p-4">
-    <button id="profileBtn" aria-label="User Profile" class="relative w-10 h-10 rounded-full bg-white text-black font-bold flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white">
-      <span id="profileInitial" class="text-lg select-none"></span>
-    </button>
-  </header>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE DHH STORE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for a more consistent B&W theme (optional) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a; /* Dark gray or black */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cccccc; /* Light gray or white */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffffff;
+        }
 
-    <main class="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-4">
-      <h1 class="text-5xl sm:text-7xl font-extrabold mb-2 text-center">Welcome to THE DHH STORE</h1>
-      <p class="text-xl sm:text-2xl font-semibold text-gray-300 px-2 text-center break-words max-w-full">Coming Soon</p>
+        /* Ensure high contrast for accessibility */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter as specified in general instructions */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .product-card, .cart-item, .modal-content {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .btn {
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn-primary { /* White button, black text */
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+        }
+        .btn-primary:hover { /* Black button, white text on hover */
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+        }
+        .btn-secondary { /* Black button, white text */
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+        }
+        .btn-secondary:hover { /* White button, black text on hover */
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+        }
+        /* In dark mode (body.bg-black), nav links need white underline */
+        body.bg-black .nav-link::after {
+            background-color: white;
+        }
+        /* In light mode (body.bg-white), nav links need black underline */
+        body.bg-white .nav-link::after {
+            background-color: black;
+        }
+        
+        .category-nav-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600; /* semibold */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.bg-black .category-nav-button {
+            background-color: #374151; /* gray-700 */
+            color: white;
+            border: 1px solid #4b5563; /* gray-600 */
+        }
+        body.bg-black .category-nav-button:hover {
+            background-color: #4b5563; /* gray-600 */
+        }
+        body.bg-white .category-nav-button {
+            background-color: #e5e7eb; /* gray-200 */
+            color: black;
+            border: 1px solid #d1d5db; /* gray-300 */
+        }
+        body.bg-white .category-nav-button:hover {
+            background-color: #d1d5db; /* gray-300 */
+        }
+
+
+        /* Ensure images maintain aspect ratio and don't overflow */
+        .product-image {
+            aspect-ratio: 3 / 4; /* Common aspect ratio for clothing */
+            object-fit: cover;
+            width: 100%;
+            height: auto; /* Or a fixed height if desired, with object-fit */
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7); /* Dim background */
+        }
+        .modal-content {
+            background-color: #fefefe; /* White background for modal */
+            color: #000000; /* Black text */
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+
+    <header class="bg-black text-white p-4 shadow-md sticky top-0 z-50 border-b border-gray-700">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold cursor-pointer" onclick="showPage('home')">THE DHH STORE</h1>
+            <nav class="space-x-4 hidden md:flex"> {/* Hide on small screens, show on medium and up */}
+                <a href="#" class="nav-link hover:text-gray-300" onclick="showPage('home'); setActiveLink(this);">Home</a>
+                <a href="#" class="nav-link hover:text-gray-300" onclick="showPage('products'); setActiveLink(this);">All Products</a>
+                <a href="#" class="nav-link hover:text-gray-300" onclick="showPage('cart'); setActiveLink(this);">
+                    Cart (<span id="cart-count">0</span>)
+                </a>
+            </nav>
+            <div class="flex items-center space-x-2">
+                <button id="theme-toggle" class="p-2 rounded-md btn btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md btn btn-secondary">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+         <div id="mobile-menu" class="hidden md:hidden bg-black text-white mt-2 py-2 border-t border-gray-700">
+            <a href="#" class="block px-4 py-2 nav-link hover:bg-gray-700" onclick="showPage('home'); setActiveLink(this); toggleMobileMenu();">Home</a>
+            <a href="#" class="block px-4 py-2 nav-link hover:bg-gray-700" onclick="showPage('products'); setActiveLink(this); toggleMobileMenu();">All Products</a>
+            <a href="#" class="block px-4 py-2 nav-link hover:bg-gray-700" onclick="showPage('cart'); setActiveLink(this); toggleMobileMenu();">Cart (<span id="cart-count-mobile">0</span>)</a>
+        </div>
+    </header>
+
+    <nav id="category-nav" class="bg-gray-800 text-white p-3 shadow-md sticky top-[73px] z-40"> {/* Adjust top value based on header height */}
+        <div class="container mx-auto flex flex-wrap justify-center items-center gap-2 md:gap-4">
+            <button class="category-nav-button" onclick="showCategory('T-Shirt')">Tees</button>
+            <button class="category-nav-button" onclick="showCategory('Shoes')">Shoes</button>
+            <button class="category-nav-button" onclick="showCategory('Cargos')">Cargos</button>
+            <button class="category-nav-button" onclick="showCategory('Chinos')">Chinos</button>
+            <button class="category-nav-button" onclick="showCategory('Jewellery')">Jewellery</button>
+        </div>
+    </nav>
+
+
+    <main class="container mx-auto p-4 flex-grow">
+        <section id="home-page" class="page">
+            <div class="bg-white text-black p-8 md:p-16 rounded-lg text-center shadow-xl">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Welcome to THE DHH STORE</h2>
+                <p class="text-lg md:text-xl mb-8">Your one-stop shop for exclusive DHH-inspired fashion.</p>
+                <button class="btn btn-secondary px-8 py-3 text-lg rounded-md" onclick="showPage('products')">Shop All</button>
+            </div>
+            <div class="mt-12">
+                <h3 class="text-3xl font-semibold mb-6 text-center text-white">Featured Products</h3>
+                <div id="featured-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+            </div>
+        </section>
+
+        <section id="products-page" class="page hidden">
+            <h2 id="products-page-title" class="text-3xl font-bold mb-8 text-center">All Products</h2>
+             <div class="mb-8 p-4 bg-gray-800 rounded-lg shadow">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <label for="filter-category" class="mr-2 text-white">Category:</label>
+                        <select id="filter-category" class="p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-white focus:border-white">
+                            <option value="all">All</option>
+                            <option value="T-Shirt">T-Shirts</option>
+                            <option value="Hoodie">Hoodies</option>
+                            <option value="Jacket">Jackets</option>
+                            <option value="Pants">Pants</option>
+                            <option value="Shoes">Shoes</option>
+                            <option value="Cargos">Cargos</option>
+                            <option value="Chinos">Chinos</option>
+                            <option value="Jewellery">Jewellery</option>
+                            <option value="Accessory">Accessories</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sort-price" class="mr-2 text-white">Sort by:</label>
+                        <select id="sort-price" class="p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-white focus:border-white">
+                            <option value="default">Default</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                </div>
+        </section>
+
+        <section id="product-detail-page" class="page hidden">
+            </section>
+
+        <section id="cart-page" class="page hidden">
+            <h2 class="text-3xl font-bold mb-8 text-center">Your Shopping Cart</h2>
+            <div id="cart-items-container" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <p id="empty-cart-message" class="text-center text-gray-400">Your cart is empty.</p>
+            </div>
+            <div id="cart-summary" class="mt-8 p-6 bg-gray-900 rounded-lg shadow-lg text-right hidden">
+                <p class="text-lg">Subtotal: <span id="cart-subtotal">₹0.00</span></p>
+                <p class="text-lg">GST (<span id="gst-rate-display">18</span>%): <span id="cart-gst">₹0.00</span></p>
+                <p class="text-2xl font-bold mt-2">Grand Total: <span id="cart-total">₹0.00</span></p>
+                <button class="btn btn-primary px-8 py-3 text-lg rounded-md mt-6 w-full md:w-auto" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                <button class="btn btn-secondary px-8 py-3 text-lg rounded-md mt-4 w-full md:w-auto" onclick="showPage('products')">Continue Shopping</button>
+            </div>
+        </section>
     </main>
 
-  <!-- Modal -->
-  <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="bg-white text-black rounded-lg p-6 max-w-sm w-full relative">
-      <button id="closeModal" aria-label="Close" class="absolute top-2 right-2 text-black font-bold text-xl">&times;</button>
-      <h2 class="text-2xl font-semibold mb-4">User Information</h2>
-      <p><strong>Name:</strong> <span id="userName"></span></p>
-      <p><strong>Email:</strong> <span id="userEmail"></span></p>
+    <footer class="bg-black text-white p-6 text-center border-t border-gray-700">
+        <p>&copy; <span id="current-year"></span> THE DHH STORE. All Rights Reserved.</p>
+        <p class="text-sm text-gray-400">Exclusive DHH-Inspired Fashion</p>
+    </footer>
+
+    <div id="notification-modal" class="modal">
+        <div class="modal-content bg-white text-black p-6 rounded-lg shadow-xl">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <p id="notification-message" class="text-lg"></p>
+            <button class="btn btn-secondary mt-4 px-6 py-2 rounded-md" onclick="closeModal()">OK</button>
+        </div>
     </div>
-  </div>
+    <textarea id="clipboard-helper" style="position: absolute; left: -9999px; top: -9999px;"></textarea>
 
-  <script>
-    const profileBtn = document.getElementById('profileBtn');
-    const profileModal = document.getElementById('profileModal');
-    const closeModal = document.getElementById('closeModal');
-    const userNameSpan = document.getElementById('userName');
-    const userEmailSpan = document.getElementById('userEmail');
+    <script>
+        // --- CONFIGURATION ---
+        const INSTAGRAM_USERNAME = "thedhhstore.in"; // IMPORTANT: Replace with your actual Instagram username
+        const GST_RATE = 0.18; // 18% GST
 
-    profileBtn.addEventListener('click', () => {
-      // Load user info from localStorage
-      const name = localStorage.getItem('dhhUserName') || 'Unknown';
-      const email = localStorage.getItem('dhhUserEmail') || 'Unknown';
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setInitialTheme();
+            loadProducts(); // Initial load for all products (will be filtered by showPage)
+            updateCartCount();
+            showPage('home'); // Show home page by default
+            setActiveLink(document.querySelector('header nav a[onclick*="home"]')); // Main nav
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Event listeners for filters and sorting
+            document.getElementById('filter-category').addEventListener('change', loadProducts);
+            document.getElementById('sort-price').addEventListener('change', loadProducts);
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+            document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
 
-      userNameSpan.textContent = name;
-      userEmailSpan.textContent = email;
 
-      // Set profile initial
-      const profileInitial = document.getElementById('profileInitial');
-      profileInitial.textContent = name.charAt(0).toUpperCase();
+        });
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
 
-      profileModal.classList.remove('opacity-0', 'pointer-events-none');
-    });
+        // --- THEME SWITCHER ---
+        function setInitialTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            const header = document.querySelector('header');
+            const footer = document.querySelector('footer');
+            const categoryNav = document.getElementById('category-nav');
 
-    closeModal.addEventListener('click', () => {
-      profileModal.classList.add('opacity-0', 'pointer-events-none');
-    });
+            if (savedTheme === 'light') {
+                document.body.classList.remove('bg-black', 'text-white');
+                document.body.classList.add('bg-white', 'text-black');
+                header.classList.remove('bg-black', 'text-white', 'border-gray-700');
+                header.classList.add('bg-white', 'text-black', 'border-gray-200');
+                footer.classList.remove('bg-black', 'text-white', 'border-gray-700');
+                footer.classList.add('bg-white', 'text-black', 'border-gray-200');
+                categoryNav.classList.remove('bg-gray-800', 'text-white');
+                categoryNav.classList.add('bg-gray-100', 'text-black');
+                document.getElementById('theme-toggle').innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591M12 12a2.25 2.25 0 0 0-2.25 2.25c0 1.38.506 2.63 1.355 3.553l-.005.005h1.79c.849-.923 1.355-2.173 1.355-3.553A2.25 2.25 0 0 0 12 12Z" />
+                    </svg>`;
+            } else { // Dark theme
+                 document.body.classList.add('bg-black', 'text-white');
+                document.body.classList.remove('bg-white', 'text-black');
+                header.classList.add('bg-black', 'text-white', 'border-gray-700');
+                header.classList.remove('bg-white', 'text-black', 'border-gray-200');
+                footer.classList.add('bg-black', 'text-white', 'border-gray-700');
+                footer.classList.remove('bg-white', 'text-black', 'border-gray-200');
+                categoryNav.classList.add('bg-gray-800', 'text-white');
+                categoryNav.classList.remove('bg-gray-100', 'text-black');
+                document.getElementById('theme-toggle').innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>`;
+            }
+            updateNavLinkStyles(); // For main nav links
+            updateCategoryButtonStyles(); // For category nav buttons
+        }
 
-    // Close modal on outside click
-    profileModal.addEventListener('click', (e) => {
-      if (e.target === profileModal) {
-        profileModal.classList.add('opacity-0', 'pointer-events-none');
-      }
-    });
-  </script>
+        function toggleTheme() {
+            if (document.body.classList.contains('bg-black')) { // If current is dark, switch to light
+                localStorage.setItem('theme', 'light');
+            } else { // If current is light, switch to dark
+                localStorage.setItem('theme', 'dark');
+            }
+            setInitialTheme(); // Re-apply theme based on new localStorage value
+        }
+        
+        function updateNavLinkStyles() {
+            const isLightTheme = document.body.classList.contains('bg-white');
+            document.querySelectorAll('header nav .nav-link, #mobile-menu .nav-link').forEach(link => {
+                if (isLightTheme) {
+                    link.classList.remove('text-white', 'hover:text-gray-300', 'hover:bg-gray-700');
+                    link.classList.add('text-black', 'hover:text-gray-700', 'hover:bg-gray-200');
+                } else {
+                    link.classList.remove('text-black', 'hover:text-gray-700', 'hover:bg-gray-200');
+                    link.classList.add('text-white', 'hover:text-gray-300', 'hover:bg-gray-700');
+                }
+            });
+        }
+
+        function updateCategoryButtonStyles() {
+            const isLightTheme = document.body.classList.contains('bg-white');
+            document.querySelectorAll('#category-nav .category-nav-button').forEach(button => {
+                if (isLightTheme) {
+                    button.classList.remove('bg-gray-700', 'text-white', 'border-gray-600', 'hover:bg-gray-600');
+                    button.classList.add('bg-gray-200', 'text-black', 'border-gray-300', 'hover:bg-gray-300');
+                } else {
+                    button.classList.remove('bg-gray-200', 'text-black', 'border-gray-300', 'hover:bg-gray-300');
+                    button.classList.add('bg-gray-700', 'text-white', 'border-gray-600', 'hover:bg-gray-600');
+                }
+            });
+        }
+
+
+        // --- MOCK PRODUCT DATA ---
+        const allProducts = [
+            { id: 1, name: "Classic Black Tee", price: 799, image: "https://placehold.co/400x500/000000/FFFFFF?text=Black+Tee", description: "A timeless black t-shirt made from premium cotton.", category: "T-Shirt", sizes: ["S", "M", "L", "XL"], featured: true },
+            { id: 2, name: "Minimalist White Hoodie", price: 1499, image: "https://placehold.co/400x500/FFFFFF/000000?text=White+Hoodie", description: "Stay cozy and stylish with this minimalist white hoodie.", category: "Hoodie", sizes: ["M", "L", "XL"], featured: true },
+            { id: 3, name: "Urban Black Jacket", price: 2999, image: "https://placehold.co/400x500/000000/FFFFFF?text=Black+Jacket", description: "A sleek urban jacket for a modern look.", category: "Jacket", sizes: ["S", "M", "L"], featured: false },
+            { id: 4, name: "Essential White Crewneck", price: 999, image: "https://placehold.co/400x500/FFFFFF/000000?text=White+Crew", description: "An essential white crewneck sweatshirt.", category: "T-Shirt", sizes: ["S", "M", "L", "XL", "XXL"], featured: true },
+            { id: 5, name: "Stealth Black Joggers", price: 1299, image: "https://placehold.co/400x500/000000/FFFFFF?text=Black+Joggers", description: "Comfortable black joggers.", category: "Pants", sizes: ["S", "M", "L"], featured: false },
+            { id: 6, name: "Crisp White Polo", price: 899, image: "https://placehold.co/400x500/FFFFFF/000000?text=White+Polo", description: "A crisp white polo shirt.", category: "T-Shirt", sizes: ["M", "L", "XL"], featured: false },
+            { id: 7, name: "Shadow Black Beanie", price: 499, image: "https://placehold.co/400x500/000000/FFFFFF?text=Black+Beanie", description: "Stylish black beanie.", category: "Accessory", sizes: ["One Size"], featured: true},
+            { id: 8, name: "Ivory White Cap", price: 599, image: "https://placehold.co/400x500/FFFFFF/000000?text=White+Cap", description: "Clean ivory white cap.", category: "Accessory", sizes: ["One Size"], featured: false},
+            { id: 9, name: "DHH Signature Tee", price: 1099, image: "https://placehold.co/400x500/1a1a1a/e0e0e0?text=DHH+Tee", description: "Exclusive DHH signature black tee.", category: "T-Shirt", sizes: ["S", "M", "L", "XL"], featured: true },
+            { id: 10, name: "Monochrome Sneakers", price: 3499, image: "https://placehold.co/400x500/000000/FFFFFF?text=B&W+Shoes", description: "Stylish black and white sneakers.", category: "Shoes", sizes: ["7", "8", "9", "10", "11"], featured: false },
+            { id: 11, name: "Utility Black Cargos", price: 2199, image: "https://placehold.co/400x500/1c1c1c/dddddd?text=Cargos", description: "Durable black cargo pants with multiple pockets.", category: "Cargos", sizes: ["30", "32", "34", "36"], featured: true },
+            { id: 12, name: "Classic White Chinos", price: 1899, image: "https://placehold.co/400x500/f0f0f0/0a0a0a?text=Chinos", description: "Versatile white chino pants for a smart look.", category: "Chinos", sizes: ["30", "32", "34", "36"], featured: false },
+            { id: 13, name: "Silver Link Chain", price: 1599, image: "https://placehold.co/400x500/cccccc/111111?text=Chain", description: "Minimalist silver link chain necklace.", category: "Jewellery", sizes: ["One Size"], featured: false },
+            { id: 14, name: "Obsidian Ring", price: 999, image: "https://placehold.co/400x500/050505/fafafa?text=Ring", description: "Sleek obsidian black ring.", category: "Jewellery", sizes: ["8", "9", "10"], featured: true }
+        ];
+
+        // --- PAGE NAVIGATION ---
+        function showPage(pageId, category = null) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            const activePage = document.getElementById(pageId + '-page');
+            if (activePage) {
+                activePage.classList.remove('hidden');
+            }
+            
+            const productsPageTitle = document.getElementById('products-page-title');
+
+            if (pageId === 'cart') {
+                renderCartPage();
+            } else if (pageId === 'products') {
+                const categoryFilterDropdown = document.getElementById('filter-category');
+                if (category) {
+                    categoryFilterDropdown.value = category;
+                    productsPageTitle.textContent = `${category}`;
+                } else {
+                    categoryFilterDropdown.value = 'all'; // Reset to 'all' if no specific category
+                     productsPageTitle.textContent = 'All Products';
+                }
+                loadProducts(); // Reload products with the (potentially new) filter
+            } else if (pageId === 'home') {
+                loadFeaturedProducts(); // Load featured products for home page
+            }
+        }
+        
+        function showCategory(categoryName) {
+            showPage('products', categoryName);
+            // Optionally, scroll to product list or top of page
+            // window.scrollTo(0, document.getElementById('products-page-title').offsetTop - 100); // Adjust offset
+        }
+
+
+        function setActiveLink(activeLinkElement) {
+            // For main navigation
+            document.querySelectorAll('header nav a.nav-link, #mobile-menu a.nav-link').forEach(link => {
+                link.classList.remove('active', 'font-semibold'); 
+            });
+            if (activeLinkElement) {
+                activeLinkElement.classList.add('active', 'font-semibold');
+            }
+        }
+
+        // --- PRODUCT DISPLAY ---
+        function loadProducts() {
+            const productListContainer = document.getElementById('product-list');
+            const categoryFilter = document.getElementById('filter-category').value;
+            const sortOption = document.getElementById('sort-price').value;
+            const productsPageTitle = document.getElementById('products-page-title');
+
+            if (!productListContainer) return;
+            productListContainer.innerHTML = ''; // Clear existing products
+
+            let filteredProducts = allProducts;
+            if (categoryFilter !== 'all') {
+                filteredProducts = allProducts.filter(p => p.category === categoryFilter);
+                productsPageTitle.textContent = `${categoryFilter.charAt(0).toUpperCase() + categoryFilter.slice(1)}`;
+                 if (categoryFilter === "T-Shirt") productsPageTitle.textContent = "T-Shirts"; // Pluralize
+            } else {
+                productsPageTitle.textContent = 'All Products';
+            }
+
+
+            if (sortOption === 'price-asc') {
+                filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (sortOption === 'price-desc') {
+                filteredProducts.sort((a, b) => b.price - a.price);
+            }
+
+
+            filteredProducts.forEach(product => {
+                const productCard = `
+                    <div class="product-card bg-gray-700 text-white rounded-lg shadow-lg overflow-hidden p-4 flex flex-col justify-between">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover product-image rounded-md mb-4 cursor-pointer" onerror="this.src='https://placehold.co/400x500/333333/FFFFFF?text=Image+Not+Found';" onclick="showProductDetail(${product.id})">
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
+                            <p class="text-lg font-bold mb-3">₹${product.price.toFixed(2)}</p>
+                        </div>
+                        <button class="btn btn-primary w-full py-2 rounded-md mt-auto" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                `;
+                productListContainer.innerHTML += productCard;
+            });
+             // Update styles for product cards based on current theme
+            updateProductCardStyles();
+        }
+
+        function updateProductCardStyles() {
+            const isLightTheme = document.body.classList.contains('bg-white');
+            document.querySelectorAll('.product-card').forEach(card => {
+                if (isLightTheme) {
+                    card.classList.remove('bg-gray-800', 'text-white');
+                    card.classList.add('bg-gray-100', 'text-black', 'border', 'border-gray-200');
+                } else {
+                    card.classList.remove('bg-gray-100', 'text-black', 'border', 'border-gray-200');
+                    card.classList.add('bg-gray-800', 'text-white');
+                }
+            });
+        }
+        
+        function loadFeaturedProducts() {
+            const featuredProductsContainer = document.getElementById('featured-products');
+            if (!featuredProductsContainer) return;
+            featuredProductsContainer.innerHTML = '';
+            const featured = allProducts.filter(p => p.featured).slice(0, 3); // Show up to 3 featured products
+
+            featured.forEach(product => {
+                const productCard = `
+                    <div class="product-card bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden p-4 flex flex-col justify-between">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover product-image rounded-md mb-4 cursor-pointer" onerror="this.src='https://placehold.co/400x500/333333/FFFFFF?text=Image+Not+Found';" onclick="showProductDetail(${product.id})">
+                         <div class="flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
+                            <p class="text-lg font-bold mb-3">₹${product.price.toFixed(2)}</p>
+                        </div>
+                        <button class="btn btn-primary w-full py-2 rounded-md mt-auto" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                `;
+                featuredProductsContainer.innerHTML += productCard;
+            });
+            updateProductCardStyles(); // Apply theme to featured product cards
+        }
+
+        function showProductDetail(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const detailContainer = document.getElementById('product-detail-page');
+            const isLightTheme = document.body.classList.contains('bg-white');
+            const bgColorClass = isLightTheme ? 'bg-gray-100' : 'bg-gray-800';
+            const textColorClass = isLightTheme ? 'text-black' : 'text-white';
+            const inputBgClass = isLightTheme ? 'bg-gray-200 border-gray-300' : 'bg-gray-700 border-gray-600';
+            const pTextColorClass = isLightTheme ? 'text-gray-700' : 'text-gray-300';
+
+
+            detailContainer.innerHTML = `
+                <div class="${bgColorClass} ${textColorClass} p-6 md:p-8 rounded-lg shadow-xl flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-auto max-h-[70vh] object-contain rounded-lg product-image" onerror="this.src='https://placehold.co/600x800/333333/FFFFFF?text=Image+Not+Found';">
+                        </div>
+                    <div class="md:w-1/2 flex flex-col">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">${product.name}</h2>
+                        <p class="text-2xl font-semibold mb-6">₹${product.price.toFixed(2)}</p>
+                        <p class="${pTextColorClass} mb-6 leading-relaxed">${product.description}</p>
+                        
+                        <div class="mb-6">
+                            <label for="size-select-${product.id}" class="block text-sm font-medium ${pTextColorClass} mb-1">Size:</label>
+                            <select id="size-select-${product.id}" class="w-full p-2 rounded-md ${inputBgClass} ${textColorClass} focus:ring-white focus:border-white">
+                                ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="quantity-select-${product.id}" class="block text-sm font-medium ${pTextColorClass} mb-1">Quantity:</label>
+                            <input type="number" id="quantity-select-${product.id}" value="1" min="1" class="w-20 p-2 rounded-md ${inputBgClass} ${textColorClass} focus:ring-white focus:border-white">
+                        </div>
+                        
+                        <button class="btn btn-primary w-full py-3 text-lg rounded-md mt-auto" onclick="addToCart(${product.id}, document.getElementById('size-select-${product.id}').value, parseInt(document.getElementById('quantity-select-${product.id}').value))">Add to Cart</button>
+                        <button class="btn btn-secondary w-full py-2 rounded-md mt-4" onclick="showPage('products')">Back to Products</button>
+                    </div>
+                </div>
+            `;
+            showPage('product-detail');
+        }
+
+
+        // --- CART MANAGEMENT ---
+        function getCart() {
+            return JSON.parse(localStorage.getItem('shoppingCart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('shoppingCart', JSON.stringify(cart));
+            updateCartCount();
+            // Only re-render if cart page is currently visible
+            const cartPageElement = document.getElementById('cart-page');
+            if (cartPageElement && !cartPageElement.classList.contains('hidden')) {
+                 renderCartPage();
+            }
+        }
+
+        function addToCart(productId, selectedSize = null, quantity = 1) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            let cart = getCart();
+            // If size is not provided (e.g. from product list page), try to get it from product detail page or default
+            if (!selectedSize && product.sizes && product.sizes.length > 0) {
+                 const sizeSelect = document.getElementById(`size-select-${product.id}`); // This might be null if called from product list
+                 selectedSize = sizeSelect ? sizeSelect.value : product.sizes[0];
+            } else if (!selectedSize && (!product.sizes || product.sizes.length === 0)) {
+                selectedSize = "One Size"; // Default for products without explicit sizes
+            }
+
+
+            const existingItemIndex = cart.findIndex(item => item.id === productId && item.size === selectedSize);
+
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity: quantity, size: selectedSize });
+            }
+            saveCart(cart);
+            showNotification(`${product.name} added to cart!`);
+        }
+
+        function updateCartItemQuantity(productId, itemSize, newQuantity) { // itemSize to be precise
+            let cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === productId && item.size === itemSize);
+            if (itemIndex > -1) {
+                if (newQuantity > 0) {
+                    cart[itemIndex].quantity = newQuantity;
+                } else {
+                    cart.splice(itemIndex, 1); // Remove if quantity is 0 or less
+                }
+                saveCart(cart);
+            }
+        }
+
+        function removeFromCart(productId, size) {
+            let cart = getCart();
+            cart = cart.filter(item => !(item.id === productId && item.size === size));
+            saveCart(cart);
+        }
+
+        function updateCartCount() {
+            const cart = getCart();
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+            document.getElementById('cart-count-mobile').textContent = count;
+        }
+
+        function renderCartPage() {
+            const cart = getCart();
+            const cartItemsContainer = document.getElementById('cart-items-container');
+            const cartSummaryDiv = document.getElementById('cart-summary');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            
+            const isLightTheme = document.body.classList.contains('bg-white');
+            const itemBgClass = isLightTheme ? 'bg-gray-50' : 'bg-gray-800';
+            const itemBorderClass = isLightTheme ? 'border-gray-200' : 'border-gray-700';
+            const summaryBgClass = isLightTheme ? 'bg-gray-100' : 'bg-gray-900';
+            const inputBgClass = isLightTheme ? 'bg-gray-200 border-gray-300' : 'bg-gray-700 border-gray-600';
+            const textColorClass = isLightTheme ? 'text-black' : 'text-white';
+            const secondaryTextColorClass = isLightTheme ? 'text-gray-600' : 'text-gray-400';
+
+
+            cartItemsContainer.innerHTML = ''; // Clear previous items
+            cartItemsContainer.className = `${itemBgClass} p-6 rounded-lg shadow-lg`; // Apply theme to container
+
+
+            if (cart.length === 0) {
+                // Ensure emptyCartMessage exists or create it if it was removed
+                let currentEmptyMsg = document.getElementById('empty-cart-message');
+                if (!currentEmptyMsg) {
+                    currentEmptyMsg = document.createElement('p');
+                    currentEmptyMsg.id = 'empty-cart-message';
+                    currentEmptyMsg.className = `text-center ${secondaryTextColorClass}`;
+                    cartItemsContainer.appendChild(currentEmptyMsg);
+                }
+                currentEmptyMsg.textContent = "Your cart is empty.";
+                currentEmptyMsg.classList.remove('hidden');
+                cartSummaryDiv.classList.add('hidden');
+                return;
+            }
+            
+            const existingEmptyCartMessage = document.getElementById('empty-cart-message');
+            if(existingEmptyCartMessage) existingEmptyCartMessage.classList.add('hidden');
+            
+            cartSummaryDiv.classList.remove('hidden');
+            cartSummaryDiv.className = `mt-8 p-6 ${summaryBgClass} ${textColorClass} rounded-lg shadow-lg text-right`;
+
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                const cartItemHTML = `
+                    <div class="cart-item flex flex-col md:flex-row items-center justify-between p-4 border-b ${itemBorderClass} last:border-b-0 gap-4">
+                        <div class="flex items-center gap-4 w-full md:w-2/5">
+                            <img src="${item.image}" alt="${item.name}" class="w-20 h-24 object-cover rounded" onerror="this.src='https://placehold.co/80x96/333333/FFFFFF?text=N/A';">
+                            <div>
+                                <h3 class="text-lg font-semibold ${textColorClass}">${item.name}</h3>
+                                <p class="text-sm ${secondaryTextColorClass}">Size: ${item.size || 'One Size'}</p>
+                                <p class="text-sm ${secondaryTextColorClass}">Price: ₹${item.price.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 md:w-1/5 justify-center">
+                            <label for="qty-${item.id}-${item.size}" class="sr-only">Quantity</label>
+                            <input type="number" id="qty-${item.id}-${item.size.replace(/\s+/g, '-')}" value="${item.quantity}" min="1" 
+                                   class="w-16 p-1 rounded ${inputBgClass} ${textColorClass} text-center"
+                                   onchange="updateCartItemQuantity(${item.id}, '${item.size}', parseInt(this.value))">
+                        </div>
+                        <p class="md:w-1/5 text-center font-semibold ${textColorClass}">₹${itemTotal.toFixed(2)}</p>
+                        <button class="md:w-1/5 text-red-500 hover:text-red-400 font-semibold" onclick="removeFromCart(${item.id}, '${item.size}')">Remove</button>
+                    </div>
+                `;
+                cartItemsContainer.innerHTML += cartItemHTML;
+            });
+
+            const gstAmount = subtotal * GST_RATE;
+            const total = subtotal + gstAmount;
+
+            document.getElementById('gst-rate-display').textContent = (GST_RATE * 100).toFixed(0);
+            document.getElementById('cart-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('cart-gst').textContent = `₹${gstAmount.toFixed(2)}`;
+            document.getElementById('cart-total').textContent = `₹${total.toFixed(2)}`;
+        }
+
+        // --- CHECKOUT PROCESS ---
+        function proceedToCheckout() {
+            const cart = getCart();
+            if (cart.length === 0) {
+                showNotification("Your cart is empty. Add some items first!");
+                return;
+            }
+
+            if (!INSTAGRAM_USERNAME || INSTAGRAM_USERNAME === "YOUR_INSTAGRAM_USERNAME") {
+                showNotification("Instagram username not configured. Please contact support or developer.");
+                console.error("CRITICAL: INSTAGRAM_USERNAME is not set in the script.");
+                return;
+            }
+
+            let message = "Hi! I'd like to order the following items from THE DHH STORE:\n";
+            let subtotal = 0;
+            cart.forEach(item => {
+                message += `- ${item.name} (Size: ${item.size || 'One Size'}) x ${item.quantity}\n`;
+                subtotal += item.price * item.quantity;
+            });
+            const gstAmount = subtotal * GST_RATE;
+            const total = subtotal + gstAmount;
+            message += `\nTotal Price (incl. GST ${ (GST_RATE * 100).toFixed(0)}%): ₹${total.toFixed(2)}`;
+
+            // Copy to clipboard
+            const clipboardHelper = document.getElementById('clipboard-helper');
+            clipboardHelper.value = message;
+            clipboardHelper.select();
+            try {
+                document.execCommand('copy');
+                showNotification("Order details copied to clipboard! Redirecting to Instagram...");
+            } catch (err) {
+                showNotification("Could not copy to clipboard. Please copy manually. Redirecting...");
+                console.error('Clipboard copy failed:', err);
+            }
+            
+            // Redirect to Instagram DM
+            const instagramUrl = `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+            setTimeout(() => {
+                window.location.href = instagramUrl;
+            }, 2000); 
+        }
+
+        // --- NOTIFICATION MODAL ---
+        const modal = document.getElementById('notification-modal');
+        const notificationMessage = document.getElementById('notification-message');
+        
+        function showNotification(message) {
+            notificationMessage.textContent = message;
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+    </script>
 </body>
 </html>
